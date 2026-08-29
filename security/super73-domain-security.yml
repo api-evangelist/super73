@@ -1,0 +1,35 @@
+generated: '2026-08-29'
+method: probed
+source: live DNS/TLS/HTTP probes of apis.yml + OpenAPI hosts
+hosts:
+- host: super73.com
+  https: true
+  tls_version: TLSv1.3
+  cert_expires: Oct 27 15:51:33 2026 GMT
+  hsts: true
+  hsts_max_age: 7889238
+- host: shopify.dev
+  https: true
+  tls_version: TLSv1.3
+  cert_expires: Oct 10 06:37:15 2026 GMT
+  hsts: true
+  hsts_max_age: 15552000
+- host: eu.super73.com
+  https: true
+  tls_version: TLSv1.3
+  cert_expires: Oct 27 06:12:04 2026 GMT
+  hsts: true
+  hsts_max_age: 7889238
+domains:
+- domain: super73.com
+  dnssec: false
+  caa: []
+  spf: true
+  dmarc: true
+  dmarc_policy: quarantine
+- domain: shopify.dev
+  dnssec: false
+  caa: []
+  spf: false
+  dmarc: true
+  dmarc_policy: reject

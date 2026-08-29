@@ -1,0 +1,65 @@
+generated: '2026-08-29'
+method: probed
+source: >-
+  https://super73.com/.well-known/openid-configuration, /.well-known/oauth-authorization-server and
+  /.well-known/oauth-protected-resource (all HTTP 200, 2026-08-29), plus live anonymous calls to
+  /api/ucp/mcp and /api/2025-07/graphql.json
+summary: >-
+  SUPER73's agent surfaces are tiered. Catalog and cart operations on the MCP endpoint, and read queries
+  plus introspection on the Storefront GraphQL endpoint, require NO credential at all. Buyer-scoped
+  operations (customer account, saved addresses, order retrieval) escalate to a full OpenID Connect
+  authorization-code + PKCE flow hosted by Shopify on behalf of the merchant. Payment completion is
+  additionally gated on contemporaneous human approval, which is a policy control rather than a
+  credential.
+schemes:
+- id: anonymous
+  type: none
+  applies_to:
+  - https://super73.com/api/ucp/mcp (tools/list, catalog, cart)
+  - https://super73.com/api/2025-07/graphql.json (introspection and read queries)
+  - https://super73.com/products.json and the other read-only storefront JSON endpoints
+  verified: probed
+  note: Confirmed by successful unauthenticated calls on 2026-08-29.
+- id: shopify-customer-account-oidc
+  type: openIdConnect
+  flow: authorization_code
+  pkce: S256
+  issuer: https://shopify.com/authentication/13743231
+  openid_configuration: https://super73.com/.well-known/openid-configuration
+  authorization_endpoint: https://shopify.com/authentication/13743231/oauth/authorize
+  token_endpoint: https://shopify.com/authentication/13743231/oauth/token
+  jwks_uri: https://shopify.com/authentication/13743231/.well-known/jwks.json
+  grant_types:
+  - authorization_code
+  - refresh_token
+  - urn:ietf:params:oauth:grant-type:jwt-bearer
+  response_types: [code]
+  token_endpoint_auth_methods: [client_secret_basic, client_secret_post]
+  id_token_signing_algs: [RS256]
+  subject_types: [public]
+  scopes:
+  - openid
+  - email
+  - customer-account-api:full
+  - customer-account-mcp-api:full
+  applies_to:
+  - buyer identity, saved addresses and payment methods
+  - order retrieval (get_order)
+  note: >-
+    The protected resource https://super73.com declares bearer_methods_supported ["header"] and names this
+    issuer as its authorization server, so RFC 9728 protected-resource metadata is served correctly.
+- id: shop-pay-delegated
+  type: delegated
+  applies_to: [payment]
+  note: >-
+    The store's own agent instructions direct personal shopping agents to route payment through the Shop
+    skill (https://shop.app/SKILL.md) and Shop Pay so the agent never handles card data, and state that
+    agents must not complete payment without explicit buyer consent.
+  verified: searched
+  source: https://super73.com/agents.md
+eu_variant:
+  note: >-
+    eu.super73.com serves its own OIDC metadata for SUPER73 BV with a separate Shopify issuer; the model
+    is identical.
+  openid_configuration: https://eu.super73.com/.well-known/openid-configuration
+  status: 200

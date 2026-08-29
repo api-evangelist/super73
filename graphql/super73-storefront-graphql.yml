@@ -1,0 +1,110 @@
+generated: '2026-08-29'
+method: probed
+source: https://super73.com/api/2025-07/graphql.json (POST introspection, HTTP 200, 2026-08-29)
+name: SUPER73 Storefront GraphQL API
+endpoint: https://super73.com/api/2025-07/graphql.json
+status: live
+authentication: none-required-for-read
+ownership: >-
+  This is Shopify's platform-standard Storefront GraphQL schema served per-store from SUPER73's own host
+  — the templated-platform case (comparable to {site}/wp-json/...). SUPER73 did not author the schema,
+  but the endpoint is on its domain and returns its data: an anonymous {shop{name primaryDomain{url}}}
+  query returns name "SUPER73" and primaryDomain "https://super73.com". Recorded as a SUPER73 interface,
+  NOT as a SUPER73-authored contract; no SDL is saved into this repo for that reason.
+introspection:
+  available: true
+  authenticated: false
+  probed: '2026-08-29'
+  type_count: 422
+  schema_version: '2025-07'
+  schema_docs: https://shopify.dev/docs/api/storefront
+  note: >-
+    Full introspection answers anonymously. Read queries against catalog, collection, page, blog and shop
+    data succeed with no X-Shopify-Storefront-Access-Token. The response carries an extensions.cost block
+    (requestedQueryCost) — Shopify's calculated query-cost rate-limit signal.
+root_fields:
+  query:
+  - article
+  - articles
+  - blog
+  - blogs
+  - cart
+  - cartCompletionAttempt
+  - collection
+  - collections
+  - customer
+  - localization
+  - locations
+  - menu
+  - metaobject
+  - metaobjects
+  - node
+  - nodes
+  - page
+  - pages
+  - paymentSettings
+  - predictiveSearch
+  - product
+  - productRecommendations
+  - productTags
+  - productTypes
+  - products
+  - publicApiVersions
+  - search
+  - shop
+  - sitemap
+  - urlRedirects
+  mutation:
+  - cartAttributesUpdate
+  - cartBillingAddressUpdate
+  - cartBuyerIdentityUpdate
+  - cartClone
+  - cartCreate
+  - cartDeliveryAddressesAdd
+  - cartDeliveryAddressesRemove
+  - cartDeliveryAddressesReplace
+  - cartDeliveryAddressesUpdate
+  - cartDiscountCodesUpdate
+  - cartGiftCardCodesAdd
+  - cartGiftCardCodesRemove
+  - cartGiftCardCodesUpdate
+  - cartLinesAdd
+  - cartLinesRemove
+  - cartLinesUpdate
+  - cartMetafieldDelete
+  - cartMetafieldsSet
+  - cartNoteUpdate
+  - cartPaymentUpdate
+  - cartPrepareForCompletion
+  - cartRemovePersonalData
+  - cartSelectedDeliveryOptionsUpdate
+  - cartSubmitForCompletion
+  - customerAccessTokenCreate
+  - customerAccessTokenCreateWithMultipass
+  - customerAccessTokenDelete
+  - customerAccessTokenRenew
+  - customerActivate
+  - customerActivateByUrl
+  - customerAddressCreate
+  - customerAddressDelete
+  - customerAddressUpdate
+  - customerCreate
+  - customerDefaultAddressUpdate
+  - customerRecover
+  - customerReset
+  - customerResetByUrl
+  - customerUpdate
+  - shopPayPaymentRequestSessionCreate
+  - shopPayPaymentRequestSessionSubmit
+read_only_json_endpoints:
+  note: >-
+    SUPER73's own /llms.txt additionally documents unauthenticated read-only JSON endpoints for agents
+    that only need to browse. All verified 200 on 2026-08-29.
+  endpoints:
+  - path: /products.json
+    status: 200
+  - path: /products/{handle}.json
+  - path: /collections/{handle}/products.json
+  - path: /search?q={query}&type=product
+  - path: /sitemap.xml
+    status: 200

@@ -1,0 +1,114 @@
+generated: '2026-08-29'
+method: probed
+source: https://super73.com/api/ucp/mcp (POST tools/list, HTTP 200, 2026-08-29)
+name: SUPER73 Agent Commerce MCP Server
+status: live
+description: >-
+  SUPER73's North American storefront exposes a hosted, remote MCP server implementing the Universal
+  Commerce Protocol (UCP) shopping service. tools/list answers anonymously over plain JSON-RPC with 13
+  tools, each carrying a complete JSON Schema inputSchema. The server is discovered from
+  https://super73.com/llms.txt and https://super73.com/agents.md, and declared in the UCP merchant
+  profile at https://super73.com/.well-known/ucp.
+ownership: >-
+  The UCP profile resolves the store to lithiumcycles.myshopify.com — SUPER73 launched in 2016 under the
+  Lithium Cycles banner, and that is still the Shopify store handle. The profile's Google Pay handler
+  names merchant_name "SUPER73" and merchant_origin "super73.com", confirming the endpoint belongs to
+  this company.
+deployment:
+  mode: remote
+  endpoint: https://super73.com/api/ucp/mcp
+  auth: none
+  verified: probed
+  note: >-
+    Anonymous tools/list succeeds with no credential. Buyer-scoped operations (customer identity, saved
+    payment methods) escalate to the Shopify customer-account OAuth server declared in
+    /.well-known/oauth-authorization-server; the catalog and cart tools are reachable without one.
+    Payment completion additionally requires contemporaneous human buyer approval per the store's own
+    agent instructions. No stdio/npx package is published — this is a URL an MCP client POSTs to.
+transport: mcp-over-http-json-rpc
+protocol:
+  name: Universal Commerce Protocol
+  version: '2026-08-25'
+  spec: https://ucp.dev/2026-08-25/specification/overview/
+  schema: https://ucp.dev/2026-08-25/services/shopping/mcp.openrpc.json
+  supported_versions:
+  - '2026-08-25'
+  - '2026-04-08'
+  - '2026-01-23'
+  capabilities:
+  - dev.ucp.shopping.cart
+  - dev.ucp.shopping.checkout
+  - dev.ucp.shopping.fulfillment
+  - dev.ucp.shopping.discount
+  - dev.ucp.shopping.order
+  - dev.ucp.shopping.catalog.search
+  - dev.ucp.shopping.catalog.lookup
+  - dev.shopify.catalog
+  payment_handlers:
+  - com.google.pay
+  - dev.shopify.card
+  - dev.shopify.shop_pay
+tool_count: 13
+tools_list_capture: mcp/super73-mcp-tools-list.json
+tools:
+- name: search_catalog
+  category: catalog
+  description: Search the SUPER73 catalog for products matching a buyer's intent.
+  required: [meta, catalog]
+- name: lookup_catalog
+  category: catalog
+  description: Look up catalog entries by identifier.
+  required: [meta, catalog]
+- name: get_product
+  category: catalog
+  description: Retrieve a single product's details.
+  required: [meta, catalog]
+- name: create_cart
+  category: cart
+  description: Create a cart and add desired line items.
+  required: [meta, cart]
+- name: get_cart
+  category: cart
+  description: Retrieve a cart by id.
+  required: [meta, id]
+- name: update_cart
+  category: cart
+  description: Update cart line items or attributes.
+  required: [meta, cart, id]
+- name: cancel_cart
+  category: cart
+  description: Cancel/discard a cart.
+  required: [meta, id]
+- name: create_checkout
+  category: checkout
+  description: Create a checkout; returns line items, totals, discounts and taxes.
+  required: [meta, checkout]
+- name: get_checkout
+  category: checkout
+  description: Return checkout details including line items, totals, discounts and taxes.
+  required: [meta, id]
+- name: update_checkout
+  category: checkout
+  description: Set shipping address and delivery method on a checkout.
+  required: [meta, checkout, id]
+- name: complete_checkout
+  category: checkout
+  description: Finalize the purchase. Requires explicit contemporaneous buyer approval of payment.
+  required: [meta, id, checkout]
+- name: cancel_checkout
+  category: checkout
+  description: Cancel an in-progress checkout.
+  required: [meta, id]
+- name: get_order
+  category: order
+  description: Retrieve a placed order by id.
+  required: [meta, id]
+conventions:
+  money: >-
+    Prices are integers in the currency's ISO 4217 minor units paired with a currency code —
+    {"amount": 2500, "currency": "USD"} is $25.00. Agents must convert to major units before quoting.
+  ids: Shopify global IDs, e.g. gid://shopify/Checkout/abc123
+  agent_profile: >-
+    Every tool requires meta.ucp-agent.profile — a URI identifying the calling agent, used for UCP agent
+    profile discovery.
+  buyer_context: Pass context.address_country and context.currency for accurate pricing and availability.

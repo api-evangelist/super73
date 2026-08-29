@@ -1,0 +1,78 @@
+generated: '2026-08-29'
+method: derived
+source: >-
+  mcp/super73-mcp-tools-list.json (live tools/list inputSchemas) and the verified root fields of
+  https://super73.com/api/2025-07/graphql.json
+note: >-
+  Derived from the live agent surface, not from an OpenAPI (none exists). Entities and relationships are
+  read from tool input schemas and GraphQL root fields; nothing is inferred beyond what those declare.
+id_scheme:
+  format: Shopify global ID
+  pattern: gid://shopify/{Type}/{id}
+  example: gid://shopify/Checkout/abc123
+entities:
+- name: Product
+  description: A SUPER73 bike, accessory, apparel item or replacement part.
+  surfaced_by: [get_product, search_catalog, lookup_catalog]
+  graphql: [product, products, productRecommendations]
+  also_readable: GET /products/{handle}.json (unauthenticated)
+- name: Collection
+  description: A merchandising grouping of products.
+  surfaced_by: [search_catalog]
+  graphql: [collection, collections]
+  also_readable: GET /collections/{handle}/products.json (unauthenticated)
+- name: Cart
+  description: A mutable basket of line items before checkout.
+  surfaced_by: [create_cart, get_cart, update_cart, cancel_cart]
+  graphql: [cart, cartCreate, cartLinesAdd, cartLinesUpdate, cartLinesRemove]
+- name: CartLine
+  description: One product variant and quantity within a cart.
+  surfaced_by: [create_cart, update_cart]
+- name: Checkout
+  description: A priced, address-bearing commitment stage carrying totals, discounts, taxes and delivery.
+  surfaced_by: [create_checkout, get_checkout, update_checkout, complete_checkout, cancel_checkout]
+- name: Order
+  description: A completed purchase.
+  surfaced_by: [get_order]
+  access: requires customer-account-api:full — not on the anonymous surface
+- name: Money
+  description: An amount in ISO 4217 minor units plus a currency code.
+  shape: '{amount: integer, currency: string}'
+- name: AgentProfile
+  description: The URI identifying the calling agent, required on every tool call.
+  field: meta.ucp-agent.profile
+- name: Customer
+  description: The buyer identity held behind the Shopify customer-account OAuth server.
+  graphql: [customer, customerCreate, customerUpdate, customerAddressCreate]
+  access: OIDC authorization_code + PKCE
+relationships:
+- from: Cart
+  to: CartLine
+  type: has_many
+  via: cart.lines
+- from: CartLine
+  to: Product
+  type: belongs_to
+  via: product variant id
+- from: Checkout
+  to: Cart
+  type: belongs_to
+  via: cart id
+  note: UCP checkout is layered over the Shopify cart graph; Shopify retired the standalone Checkout object.
+- from: Checkout
+  to: Order
+  type: has_one
+  via: complete_checkout
+- from: Order
+  to: Customer
+  type: belongs_to
+  via: buyer identity
+- from: Collection
+  to: Product
+  type: has_many
+  via: collection products
+- from: Checkout
+  to: Money
+  type: has_many
+  via: totals, taxes, discounts
+lifecycle_path: Product -> Cart -> Checkout -> Order

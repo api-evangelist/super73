@@ -1,0 +1,24 @@
+generated: '2026-08-29'
+method: generated
+source: mcp/super73-mcp-tools-list.json + https://super73.com/agents.md
+note: >-
+  Packaged agent skills for SUPER73's live UCP/MCP commerce surface and its anonymous read path. Every
+  operation named in these skills was read from a live tools/list or GraphQL introspection response on
+  2026-08-29 — none is invented. SUPER73 publishes no skills of its own.
+skills:
+- name: super73-buy-a-bike
+  file: skills/super73-buy-a-bike.md
+  api: super73-agent-commerce
+  description: End-to-end purchase — search, cart, price, deliver, complete with human approval — plus the reversal windows.
+  operations: [search_catalog, get_product, create_cart, update_cart, create_checkout, update_checkout, complete_checkout, cancel_checkout]
+- name: super73-price-a-basket
+  file: skills/super73-price-a-basket.md
+  api: super73-agent-commerce
+  description: Produce a tax- and shipping-inclusive quote without charging, using create_checkout as a rehearsal step.
+  operations: [search_catalog, get_product, create_cart, create_checkout, update_checkout, cancel_checkout]
+- name: super73-browse-catalog
+  file: skills/super73-browse-catalog.md
+  api: super73-storefront-graphql
+  description: Anonymous read-only catalog access via the published JSON endpoints and Storefront GraphQL.
+  operations: [products, product, collection, collections, search, predictiveSearch, shop]
+skill_count: 3

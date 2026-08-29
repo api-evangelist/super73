@@ -1,0 +1,21 @@
+generated: '2026-08-29'
+method: searched
+source: https://super73.com/agents.md, https://super73.com/.well-known/ucp, https://super73.com/collections/all (all HTTP 200, 2026-08-29)
+plan_count: 0
+note: >-
+  SUPER73 publishes no API plans, tiers, quotas or developer pricing of any kind. There is no developer
+  program to price: the agent surface is an unmetered, unauthenticated affordance attached to a
+  direct-to-consumer e-commerce storefront, and access to it is free because its purpose is to sell
+  bikes. What SUPER73 does price is products — e-bikes, accessories, apparel and replacement parts,
+  listed per-SKU on the storefront and returned by the catalog tools in ISO 4217 minor units. That is
+  merchandise pricing, not API plan pricing, and it is deliberately NOT recorded here as plans.
+plans: []
+commercial_model:
+  type: free-agent-access-to-a-retail-storefront
+  monetization: product sales
+  metered: false
+  signup_required_for_api: false
+  detail: >-
+    An agent can search the catalog, build a cart and price a checkout with no account, no key and no
+    contract. Money changes hands only at complete_checkout, and only with contemporaneous human buyer
+    approval.

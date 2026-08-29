@@ -1,0 +1,28 @@
+generated: '2026-08-29'
+method: probed
+source: https://super73.com/.well-known/openid-configuration (HTTP 200, 2026-08-29)
+docs: https://shopify.dev/docs/api/customer
+issuer: https://shopify.com/authentication/13743231
+note: >-
+  These are the scopes the SUPER73 storefront's own OpenID Connect discovery document advertises as
+  supported. They are Shopify customer-account scopes served per-merchant; SUPER73 publishes no scope
+  reference page of its own, so descriptions below are read from the scope names and Shopify's customer
+  account documentation, not invented.
+scopes:
+- name: openid
+  description: Standard OpenID Connect scope; returns an ID token identifying the signed-in buyer.
+  standard: true
+- name: email
+  description: Standard OIDC scope releasing the buyer's email address claim.
+  standard: true
+- name: customer-account-api:full
+  description: >-
+    Full access to the buyer's Shopify Customer Account API surface — profile, addresses, orders and
+    subscriptions for that customer.
+  standard: false
+- name: customer-account-mcp-api:full
+  description: >-
+    Full access to the customer-account MCP surface, the authenticated counterpart of the anonymous
+    UCP commerce endpoint at /api/ucp/mcp.
+  standard: false
+scope_count: 4

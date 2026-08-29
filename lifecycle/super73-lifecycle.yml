@@ -1,0 +1,55 @@
+generated: '2026-08-29'
+method: probed
+source: >-
+  https://super73.com/.well-known/ucp, the publicApiVersions field of
+  https://super73.com/api/2025-07/graphql.json, and https://super73.com/agents.md — all 2026-08-29
+summary: >-
+  SUPER73 operates no API lifecycle program of its own. Both agent surfaces inherit their versioning and
+  deprecation cadence wholesale from the platforms underneath them — UCP dated protocol versions and
+  Shopify dated API versions — and SUPER73 publishes no changelog, no deprecation policy, no SLA and no
+  status page for either.
+versioning:
+  mcp:
+    scheme: dated protocol version negotiated via the UCP merchant profile
+    current: '2026-08-25'
+    supported: ['2026-08-25', '2026-04-08', '2026-01-23']
+    discovery: https://super73.com/.well-known/ucp
+    note: >-
+      Three versions are served concurrently, each with its own profile URL, which is a real
+      backward-compatibility window even though SUPER73 states no support duration.
+  graphql:
+    scheme: dated Shopify API version in the request path
+    current: '2025-07'
+    discovery: the publicApiVersions root query field
+    note: Shopify's own quarterly release/deprecation cadence governs this, not SUPER73.
+deprecation_policy:
+  published: false
+  sunset_header: not observed
+  deprecation_header: not observed
+  rfc8594: false
+  detail: >-
+    SUPER73 publishes no deprecation policy and no Sunset/Deprecation headers were returned on live
+    responses. The only deprecation signal available to a consumer is the disappearance of a version from
+    the supported_versions map in /.well-known/ucp.
+status_page:
+  published: false
+  probed:
+  - url: https://status.super73.com/
+    status: 000
+    note: DNS does not resolve.
+  detail: No status page, uptime dashboard or incident feed is published for any SUPER73 surface.
+sla:
+  published: false
+changelog:
+  published: false
+  detail: >-
+    No dated developer changelog or release notes exist. https://super73.com/blogs/news is a press and
+    media-kit blog about products, not API changes.
+support:
+  url: https://super73.com/pages/support
+  status: 200
+  channel: dealer / service-center directory and customer support, not developer support
+  developer_support: none
+operations_note: >-
+  The practical consequence for an integrator: there is nobody to notify you when this surface changes.
+  Poll /.well-known/ucp for version drift and re-run tools/list to detect tool changes.

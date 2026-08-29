@@ -1,0 +1,134 @@
+generated: '2026-08-29'
+method: derived
+source: >-
+  mcp/super73-mcp-tools-list.json (live tools/list, 13 tools) crossed against the verified root fields of
+  https://super73.com/api/2025-07/graphql.json (live introspection, 2026-08-29)
+note: >-
+  SUPER73 publishes no OpenAPI, so this crosswalk binds the MCP tool surface to the GraphQL surface
+  rather than to REST operationIds. Every GraphQL field named below was read from live introspection of
+  the store's own endpoint — none is guessed. Confidence reflects how directly the tool's documented
+  behaviour maps onto that field: the UCP tools are a coarser, agent-shaped projection of the Storefront
+  cart/checkout graph, so most bindings are semantic rather than 1:1.
+surfaces:
+  openapi: null
+  openapi_note: No OpenAPI or Swagger document is published on any SUPER73 host (see conformance file).
+  graphql:
+    endpoint: https://super73.com/api/2025-07/graphql.json
+    gated: false
+    introspection: anonymous
+  mcp:
+    endpoint: https://super73.com/api/ucp/mcp
+    gated: false
+    tools: 13
+crosswalk:
+- tool: search_catalog
+  category: catalog
+  graphql: [products, search, predictiveSearch]
+  rest: []
+  binding: semantic
+  confidence: high
+  note: UCP catalog search over the same product corpus the Storefront products/search fields return.
+- tool: lookup_catalog
+  category: catalog
+  graphql: [node, nodes, product, collection]
+  rest: []
+  binding: semantic
+  confidence: medium
+- tool: get_product
+  category: catalog
+  graphql: [product, productRecommendations]
+  rest: []
+  binding: direct
+  confidence: high
+  note: Also reachable unauthenticated as GET /products/{handle}.json per the store's own llms.txt.
+- tool: create_cart
+  category: cart
+  graphql: [cartCreate]
+  rest: []
+  binding: direct
+  confidence: high
+- tool: get_cart
+  category: cart
+  graphql: [cart]
+  rest: []
+  binding: direct
+  confidence: high
+- tool: update_cart
+  category: cart
+  graphql: [cartLinesAdd, cartLinesUpdate, cartLinesRemove, cartAttributesUpdate, cartNoteUpdate, cartDiscountCodesUpdate]
+  rest: []
+  binding: composite
+  confidence: high
+  note: One UCP tool collapses six Storefront cart mutations.
+- tool: cancel_cart
+  category: cart
+  graphql: [cartRemovePersonalData]
+  rest: []
+  binding: semantic
+  confidence: low
+  note: >-
+    The Storefront schema has no cartDelete mutation. UCP cart cancellation has no exact GraphQL
+    equivalent; recorded as low confidence rather than asserting a binding that does not exist.
+- tool: create_checkout
+  category: checkout
+  graphql: [cartCreate, cartPrepareForCompletion]
+  rest: []
+  binding: composite
+  confidence: medium
+  note: Shopify retired the standalone Checkout object; UCP checkout is layered over the cart graph.
+- tool: get_checkout
+  category: checkout
+  graphql: [cart, cartCompletionAttempt]
+  rest: []
+  binding: semantic
+  confidence: medium
+- tool: update_checkout
+  category: checkout
+  graphql: [cartDeliveryAddressesAdd, cartDeliveryAddressesUpdate, cartSelectedDeliveryOptionsUpdate, cartBillingAddressUpdate, cartBuyerIdentityUpdate]
+  rest: []
+  binding: composite
+  confidence: high
+- tool: complete_checkout
+  category: checkout
+  graphql: [cartSubmitForCompletion, cartPaymentUpdate]
+  rest: []
+  binding: composite
+  confidence: high
+  note: Gated on contemporaneous human buyer approval of payment by the store's published agent rules.
+- tool: cancel_checkout
+  category: checkout
+  graphql: []
+  rest: []
+  binding: none
+  confidence: low
+  note: No Storefront mutation cancels a submitted checkout; this is a UCP-layer affordance.
+- tool: get_order
+  category: order
+  graphql: []
+  rest: []
+  binding: none
+  confidence: low
+  note: >-
+    Order retrieval is not on the anonymous Storefront root; it lives behind the Shopify Customer Account
+    API, reachable only with a customer-account-api:full token from the OAuth server in
+    /.well-known/oauth-authorization-server.
+mcp_only:
+- tool: cancel_checkout
+  reason: UCP checkout lifecycle affordance with no Storefront GraphQL equivalent.
+- tool: get_order
+  reason: Requires the authenticated Customer Account API, not the anonymous Storefront graph.
+graphql_only:
+- fields: [articles, article, blogs, blog, pages, page, menu, metaobjects, metaobject, urlRedirects, sitemap, locations, localization, paymentSettings, productTags, productTypes, publicApiVersions, shop]
+  reason: Content, store-metadata and merchandising reads with no UCP commerce tool.
+- fields: [customerCreate, customerUpdate, customerRecover, customerReset, customerActivate, customerAccessTokenCreate, customerAccessTokenDelete, customerAccessTokenRenew, customerAddressCreate, customerAddressUpdate, customerAddressDelete, customerDefaultAddressUpdate]
+  reason: Customer identity and address management; UCP delegates buyer identity to the OAuth/Shop Pay layer.
+- fields: [cartGiftCardCodesAdd, cartGiftCardCodesRemove, cartGiftCardCodesUpdate, cartMetafieldsSet, cartMetafieldDelete, cartClone, shopPayPaymentRequestSessionCreate, shopPayPaymentRequestSessionSubmit]
+  reason: Gift-card, metafield, cart-clone and Shop Pay session operations not surfaced as UCP tools.
+rest_only: []
+coverage:
+  mcp_tools: 13
+  mcp_tools_bound_to_graphql: 11
+  mcp_only: 2
+  graphql_root_fields: 71
+  graphql_only_fields: 44
+  rest_operations: 0

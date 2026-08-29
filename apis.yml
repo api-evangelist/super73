@@ -1,18 +1,104 @@
 aid: super73
 name: Super73
-description: 'Super73 is a company surfaced via the API Evangelist harvest backlog (source: secondary-market)
-  and added to the network as a stub for full-pipeline profiling.'
+description: >-
+  SUPER73 (legally SUPER73, Inc., founded 2016 in Orange County, California as Lithium Cycles) is an
+  American electric-bicycle and lifestyle adventure brand best known for its moped-styled Class 2 e-bikes
+  — the S-Series, ZX, RX, R-Series Adventure and the 2026 A-Series with modular dual-battery technology.
+  The company sells direct-to-consumer through Shopify storefronts in North America (super73.com) and
+  Europe (eu.super73.com, operated by SUPER73 BV), and pairs its bikes with a mobile app that adds
+  Bluetooth ride telemetry plus a cellular IoT upgrade for GPS tracking, movement alerts, digital bike
+  passport and remote immobilizer. SUPER73 publishes no traditional developer program, but both
+  storefronts expose a real, anonymous, machine-callable agent surface: an /llms.txt and /agents.md agent
+  instruction document, a Universal Commerce Protocol (UCP 2026-08-25) merchant profile at
+  /.well-known/ucp, a live MCP endpoint at /api/ucp/mcp serving 13 commerce tools with full JSON Schema,
+  and an anonymously introspectable Shopify Storefront GraphQL API.
 url: https://raw.githubusercontent.com/api-evangelist/super73/refs/heads/main/apis.yml
+image: https://super73.com/cdn/shop/files/Super73_Logo-Horizontal-Full-Tag_1200x628_ac39ec97-b650-40d2-b3d0-8c573b7fc9e7.jpg?v=1707761079
 x-type: company
 x-source: harvest:secondary-market
-x-tier: stub
-x-tier-reason: harvest
 specificationVersion: '0.20'
 created: '2026-08-29'
 modified: '2026-08-29'
 tags:
-- Company
-apis: []
+- Electric Bikes
+- Micromobility
+- E-Commerce
+- Agentic Commerce
+- Consumer Hardware
+- Model Context Protocol
+- Universal Commerce Protocol
+- Shopify
+- Direct to Consumer
+- Internet of Things
+- Transportation
+apis:
+- aid: super73-agent-commerce
+  name: SUPER73 Agent Commerce (UCP/MCP)
+  description: >-
+    The agent-facing commerce API for the SUPER73 North American storefront. Implements the Universal
+    Commerce Protocol (UCP) 2026-08-25 over MCP: a merchant profile at /.well-known/ucp declares the
+    supported versions, capabilities (cart, checkout, fulfillment, discount, order, catalog search and
+    lookup) and payment handlers, and the MCP endpoint at /api/ucp/mcp answers tools/list anonymously
+    with 13 tools and complete JSON Schema inputs. Checkout completion requires contemporaneous human
+    buyer approval.
+  humanURL: https://super73.com/agents.md
+  baseURL: https://super73.com/api/ucp/mcp
+  tags:
+  - Agentic Commerce
+  - Model Context Protocol
+  - Universal Commerce Protocol
+  - E-Commerce
+  properties:
+  - type: MCPServer
+    url: mcp/super73-mcp.yml
+  - type: ToolCrosswalk
+    url: mcp/super73-tool-crosswalk.yml
+  - type: LLMsTxt
+    url: llms/super73-llms.txt
+  - type: Authentication
+    url: authentication/super73-authentication.yml
+  - type: RateLimits
+    url: rate-limits/super73-rate-limits.yml
+  - type: Conventions
+    url: conventions/super73-conventions.yml
+  - type: DataModel
+    url: data-model/super73-data-model.yml
+- aid: super73-storefront-graphql
+  name: SUPER73 Storefront GraphQL API
+  description: >-
+    The Shopify Storefront GraphQL API served on SUPER73's own host. Anonymous introspection and
+    anonymous read queries against SUPER73 catalog, collection, page, blog and shop data succeed with no
+    access token; cart and customer mutations are also exposed. The schema is Shopify's platform-standard
+    versioned Storefront schema (422 types at version 2025-07), served per-store — the templated-platform
+    case, not a SUPER73-authored contract.
+  humanURL: https://shopify.dev/docs/api/storefront
+  baseURL: https://super73.com/api/2025-07/graphql.json
+  tags:
+  - GraphQL
+  - E-Commerce
+  - Shopify
+  properties:
+  - type: GraphQL
+    url: graphql/super73-storefront-graphql.yml
+- aid: super73-eu-agent-commerce
+  name: SUPER73 BV Agent Commerce (UCP/MCP)
+  description: >-
+    The agent-facing commerce API for the European SUPER73 storefront, operated by SUPER73 BV on the
+    super73europe Shopify store. Identical UCP 2026-08-25 / MCP surface to the North American store —
+    the same 13 tools — served from the eu.super73.com host with its own merchant profile, OAuth
+    authorization server and buyer identity.
+  humanURL: https://eu.super73.com/llms.txt
+  baseURL: https://eu.super73.com/api/ucp/mcp
+  tags:
+  - Agentic Commerce
+  - Model Context Protocol
+  - Universal Commerce Protocol
+  - Europe
+  properties:
+  - type: MCPServer
+    url: mcp/super73-eu-mcp.yml
+  - type: LLMsTxt
+    url: llms/super73-eu-llms.txt
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
@@ -20,4 +106,51 @@ maintainers:
   email: info@apis.io
 common:
 - type: Website
-  url: https://forgeglobal.com/super73_stock/
+  url: https://super73.com/
+- type: Documentation
+  url: https://super73.com/agents.md
+- type: Support
+  url: https://super73.com/pages/support
+- type: Blog
+  url: https://super73.com/blogs/news
+- type: SignUp
+  url: https://super73.com/account/login
+- type: TermsOfService
+  url: https://super73.com/policies/terms-of-service
+- type: PrivacyPolicy
+  url: https://super73.com/policies/privacy-policy
+- type: WellKnown
+  url: well-known/super73-well-known.yml
+- type: Conformance
+  url: conformance/super73-conformance.yml
+- type: Lifecycle
+  url: lifecycle/super73-lifecycle.yml
+- type: DomainSecurity
+  url: security/super73-domain-security.yml
+- type: Plans
+  url: plans/super73-plans-pricing.yml
+- type: AgentSkill
+  url: skills/_index.yml
+- type: MCPServer
+  url: mcp/super73-mcp.yml
+- type: ToolCrosswalk
+  url: mcp/super73-tool-crosswalk.yml
+- type: LLMsTxt
+  url: llms/super73-llms.txt
+- type: GraphQL
+  url: graphql/super73-storefront-graphql.yml
+- type: Authentication
+  url: authentication/super73-authentication.yml
+- type: OAuthScopes
+  url: scopes/super73-scopes.yml
+- type: Conventions
+  url: conventions/super73-conventions.yml
+- type: RateLimits
+  url: rate-limits/super73-rate-limits.yml
+- type: DataModel
+  url: data-model/super73-data-model.yml
+x-enrichment:
+  date: '2026-08-29'
+  status: enriched
+  artifacts_added: 30
+  pass: local-v1

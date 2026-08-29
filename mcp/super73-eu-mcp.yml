@@ -1,0 +1,44 @@
+generated: '2026-08-29'
+method: probed
+source: https://eu.super73.com/api/ucp/mcp (POST tools/list, HTTP 200, 2026-08-29)
+name: SUPER73 BV Agent Commerce MCP Server
+status: live
+description: >-
+  The European SUPER73 storefront (operated by SUPER73 BV) exposes its own hosted remote MCP server
+  implementing the same Universal Commerce Protocol shopping service as the North American store.
+  tools/list answers anonymously with the same 13 tools and identical input schemas; the difference is
+  the merchant, the catalog, the currency and the customer-account authorization server.
+ownership: >-
+  https://eu.super73.com/.well-known/ucp resolves the store to super73europe.myshopify.com and
+  https://eu.super73.com/llms.txt is titled "Agent Instructions — SUPER73 BV", the European operating
+  entity of this company.
+deployment:
+  mode: remote
+  endpoint: https://eu.super73.com/api/ucp/mcp
+  auth: none
+  verified: probed
+  note: Anonymous tools/list succeeds. No stdio package is published.
+transport: mcp-over-http-json-rpc
+protocol:
+  name: Universal Commerce Protocol
+  version: '2026-08-25'
+  supported_versions:
+  - '2026-08-25'
+  - '2026-04-08'
+  - '2026-01-23'
+tool_count: 13
+tools_list_capture: mcp/super73-eu-mcp-tools-list.json
+tools:
+- search_catalog
+- lookup_catalog
+- get_product
+- create_cart
+- get_cart
+- update_cart
+- cancel_cart
+- create_checkout
+- get_checkout
+- update_checkout
+- complete_checkout
+- cancel_checkout
+- get_order

@@ -1,0 +1,45 @@
+generated: '2026-08-29'
+method: probed
+source: >-
+  https://super73.com/agents.md (published rule) and live response-header inspection of
+  POST https://super73.com/api/ucp/mcp and POST https://super73.com/api/2025-07/graphql.json, 2026-08-29
+summary: >-
+  SUPER73 states that the agent commerce endpoint is rate limited but publishes no number, no window and
+  no headers. A live 200 response carries no RateLimit-*, X-RateLimit-* or Retry-After header, so an
+  agent has no runtime budget signal on the MCP surface and must discover the ceiling by being 429'd.
+  The GraphQL surface is the exception: it returns a calculated query cost in the response body.
+limit_count: 0
+limits: []
+published_rules:
+- scope: per-IP
+  surface: https://super73.com/api/ucp/mcp
+  limit: undocumented
+  window: undocumented
+  statement: >-
+    "Respect rate limits. The MCP endpoint is rate-limited per IP. Back off on 429 responses."
+  source: https://super73.com/agents.md
+  exhaustion_status: 429
+response_headers:
+  mcp:
+    observed: [x-request-id, server]
+    ratelimit_headers: none
+    retry_after: not observed on a 200
+    note: >-
+      Probed 2026-08-29; the only correlation header returned is x-request-id. No RateLimit-* or
+      X-RateLimit-* family header is present.
+  graphql:
+    ratelimit_headers: none
+    body_signal: extensions.cost.requestedQueryCost
+    observed_example: 'requestedQueryCost: 3 for {shop{name primaryDomain{url}}}'
+    note: >-
+      Shopify's Storefront calculated-cost model. The cost block is returned in the response body rather
+      than in headers, so an agent must parse the payload to track its budget.
+  storefront_json:
+    note: >-
+      Repeated unauthenticated requests to storefront HTML paths are answered by a Cloudflare bot
+      challenge (observed HTTP 429 with a "Verifying your connection..." interstitial on
+      /account/register), which is an edge protection rather than a documented API rate limit.
+agent_guidance: >-
+  Assume no header budget on the MCP endpoint. Serialize calls, back off exponentially on 429, and cache
+  catalog reads — /products.json and the collection JSON endpoints are cheaper than repeated
+  search_catalog calls for browse-only work.

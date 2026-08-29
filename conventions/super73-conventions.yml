@@ -1,0 +1,129 @@
+generated: '2026-08-29'
+method: searched
+source: >-
+  https://super73.com/agents.md and https://super73.com/llms.txt (HTTP 200), the tool descriptions in
+  mcp/super73-mcp-tools-list.json (live tools/list), https://super73.com/pages/returns-and-cancellations
+  (HTTP 200), and live response headers from https://super73.com/api/ucp/mcp — all 2026-08-29
+summary: >-
+  SUPER73 publishes no API style guide, but its agent instruction document plus the live UCP/MCP tool
+  descriptions state enough cross-cutting semantics to operate the surface safely. Everything below is
+  quoted or read from those published sources.
+auth_style:
+  anonymous_read: true
+  detail: See authentication/super73-authentication.yml. Catalog and cart need no credential; buyer scope uses OIDC + PKCE.
+identifiers:
+  style: Shopify global IDs
+  example_format: gid://shopify/Checkout/abc123
+  source: get_checkout / update_checkout inputSchema description
+money:
+  representation: integer minor units paired with an ISO 4217 currency code
+  example: '{"amount": 2500, "currency": "USD"} is $25.00'
+  agent_rule: >-
+    Convert to major units before quoting a price to a buyer — divide by 100 for two-decimal currencies
+    such as USD and EUR; zero-decimal currencies such as JPY are already whole units.
+  source: verbatim from every UCP tool description
+agent_identity:
+  required: true
+  field: meta.ucp-agent.profile
+  type: URI
+  detail: >-
+    Every one of the 13 MCP tools requires a meta object carrying ucp-agent.profile — a URI identifying
+    the calling agent, used for UCP agent-profile discovery. There is no anonymous-agent path.
+buyer_context:
+  fields: [context.address_country, context.currency]
+  detail: Pass buyer context for accurate pricing and availability.
+  source: https://super73.com/agents.md
+pagination:
+  mcp: not documented
+  graphql: Relay-style cursor connections (first/after/last/before) per the Shopify Storefront schema.
+  storefront_json: /products.json supports limit and page query parameters.
+versioning:
+  mcp:
+    style: dated protocol versions negotiated through the UCP merchant profile
+    current: '2026-08-25'
+    supported: ['2026-08-25', '2026-04-08', '2026-01-23']
+    discovery: https://super73.com/.well-known/ucp
+  graphql:
+    style: dated Shopify API versions in the path
+    current: '2025-07'
+    discovery: the publicApiVersions root query field
+error_envelope:
+  mcp: JSON-RPC 2.0 — errors returned in the error member with code and message.
+  graphql: >-
+    GraphQL errors array; cart and customer mutations additionally return typed userErrors payloads
+    rather than transport-level failures.
+  note: SUPER73 publishes no error-code registry of its own; see errors/ (absent for that reason).
+request_tracing:
+  header: x-request-id
+  observed: true
+  example_shape: 9b0eedf5-e6ec-4beb-b30b-aa74c8fb28f0-1788006242
+  detail: Observed on a live POST to /api/ucp/mcp; no documented tracing convention accompanies it.
+rate_limit_signaling:
+  detail: See rate-limits/super73-rate-limits.yml. No RateLimit-* headers are returned; GraphQL returns a query-cost extension.
+idempotency:
+  supported: partial
+  mechanism: resource-identity rather than an idempotency key
+  header: null
+  detail: >-
+    SUPER73's UCP/MCP surface exposes NO Idempotency-Key header and documents none. What it does provide
+    is create-then-address-by-id semantics: create_cart and create_checkout return a Shopify global ID,
+    and every subsequent mutation (update_cart, update_checkout, complete_checkout, cancel_*) is
+    addressed by that id, so a retried update converges rather than duplicating. The genuinely unsafe
+    retry is create_cart / create_checkout, which will mint a second resource if replayed. Recorded as
+    partial rather than true — SUPER73 does not publish an idempotency guarantee.
+  evidence:
+  - Every non-create tool requires an "id" property of the form gid://shopify/Checkout/abc123.
+  - No Idempotency-Key or equivalent appears in any of the 13 tool inputSchemas.
+  agent_guidance: >-
+    Treat create_cart and create_checkout as non-idempotent — persist the returned id before retrying
+    anything. Treat update_*, cancel_* and the get_* reads as safe to retry.
+dry_run_mode:
+  supported: false
+  detail: >-
+    No tool accepts a simulate/dry-run flag. The closest rehearsal path is create_checkout, which returns
+    line items, totals, discounts and taxes WITHOUT charging — payment only moves on complete_checkout —
+    so an agent can price a basket fully before committing.
+reversibility:
+  grade: verified
+  applies: true
+  detail: >-
+    Every write on this surface has a published reversal path, and SUPER73 states the windows in its own
+    Returns & Cancellations policy rather than leaving them to inference.
+  surfaces:
+  - write: create_cart / update_cart
+    reversal: cancel_cart
+    window: unbounded before checkout
+    consequence: none — no money moves until complete_checkout
+    grade: documented
+  - write: create_checkout / update_checkout
+    reversal: cancel_checkout
+    window: any time before complete_checkout
+    consequence: none — payment is not captured until completion
+    grade: documented
+  - write: complete_checkout (bike order)
+    reversal: order cancellation
+    window: >-
+      "Bike order cancellations must be requested within 24 hours of the order being placed." If the
+      order has already shipped, "a 15% restocking fee will apply."
+    docs: https://super73.com/pages/returns-and-cancellations
+    channel: human support request — there is no cancel-order tool on the MCP surface
+    grade: verified
+  - write: complete_checkout (accessories, apparel, replacement parts)
+    reversal: return for refund
+    window: >-
+      "We accept returns on orders placed in the U.S. within 30 days from when the order is placed";
+      cancellation requests within 24 hours of the order being placed.
+    docs: https://super73.com/pages/returns-and-cancellations
+    channel: human support request
+    grade: verified
+  gap: >-
+    The reversal WINDOWS are published, but the reversal ACTIONS are not on the agent surface: the 13 MCP
+    tools can cancel a cart and a checkout, and can read an order, but cannot cancel or refund a placed
+    order. An agent that completes a purchase cannot undo it without a human contacting support inside
+    24 hours. This is the single highest-value gap on SUPER73's agent surface.
+cross_references:
+  authentication: authentication/super73-authentication.yml
+  scopes: scopes/super73-scopes.yml
+  rate_limits: rate-limits/super73-rate-limits.yml
+  lifecycle: lifecycle/super73-lifecycle.yml
+  mcp: mcp/super73-mcp.yml

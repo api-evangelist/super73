@@ -1,0 +1,81 @@
+generated: '2026-08-29'
+method: probed
+source: live GET of /.well-known/* on every SUPER73 storefront host, 2026-08-29
+note: >-
+  Both SUPER73 storefronts run on Shopify, which serves the OAuth/OIDC customer-account metadata and the
+  Universal Commerce Protocol merchant profile from the merchant's own host. /.well-known/ucp is the
+  agent-commerce discovery document named by SUPER73's own /llms.txt and /agents.md. security.txt,
+  api-catalog, ai-plugin.json, agent-card.json and agent.json all 404 on both hosts (a real 404 page, not
+  an SPA shell), so no SecurityTxt or AgentCard pointer is emitted.
+hosts:
+- host: super73.com
+  documents:
+  - path: /.well-known/ucp
+    status: 200
+    file: well-known/super73-ucp.json
+    content_type: application/json
+    note: UCP 2026-08-25 merchant profile; merchant_origin super73.com, merchant_name SUPER73.
+  - path: /.well-known/openid-configuration
+    status: 200
+    file: well-known/super73-openid-configuration.json
+    content_type: application/json
+  - path: /.well-known/oauth-authorization-server
+    status: 200
+    file: well-known/super73-oauth-authorization-server.json
+    content_type: application/json
+  - path: /.well-known/oauth-protected-resource
+    status: 200
+    file: well-known/super73-oauth-protected-resource.json
+    content_type: application/json
+  - path: /.well-known/security.txt
+    status: 404
+  - path: /.well-known/api-catalog
+    status: 404
+  - path: /.well-known/ai-plugin.json
+    status: 404
+  - path: /.well-known/agent-card.json
+    status: 404
+  - path: /.well-known/agent.json
+    status: 404
+- host: eu.super73.com
+  documents:
+  - path: /.well-known/ucp
+    status: 200
+    file: well-known/super73-eu-ucp.json
+    content_type: application/json
+    note: UCP 2026-08-25 merchant profile for SUPER73 BV (super73europe Shopify store).
+  - path: /.well-known/openid-configuration
+    status: 200
+    file: well-known/super73-eu-openid-configuration.json
+    content_type: application/json
+  - path: /.well-known/oauth-authorization-server
+    status: 200
+    file: well-known/super73-eu-oauth-authorization-server.json
+    content_type: application/json
+  - path: /.well-known/oauth-protected-resource
+    status: 200
+    file: well-known/super73-eu-oauth-protected-resource.json
+    content_type: application/json
+  - path: /.well-known/security.txt
+    status: 404
+  - path: /.well-known/api-catalog
+    status: 404
+  - path: /.well-known/agent-card.json
+    status: 404
+other_agent_discovery:
+- path: /llms.txt
+  host: super73.com
+  status: 200
+  file: llms/super73-llms.txt
+- path: /agents.md
+  host: super73.com
+  status: 200
+  note: Canonical agent-facing store description; /llms.txt mirrors it. Listed in sitemap_agentic_discovery.xml.
+- path: /sitemap_agentic_discovery.xml
+  host: super73.com
+  status: 200
+  note: A dedicated agent-discovery sitemap whose only entry is https://super73.com/agents.md.
+- path: /llms.txt
+  host: eu.super73.com
+  status: 200
+  file: llms/super73-eu-llms.txt
