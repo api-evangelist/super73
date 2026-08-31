@@ -25,6 +25,18 @@ tags:
 - E-Commerce
 - Agentic Commerce
 - Consumer Hardware
+- MCP
+- Universal Commerce Protocol
+- Shopify
+- Direct to Consumer
+- Internet of Things
+- Transportation
+tags_raw:
+- Electric Bikes
+- Micromobility
+- E-Commerce
+- Agentic Commerce
+- Consumer Hardware
 - Model Context Protocol
 - Universal Commerce Protocol
 - Shopify
@@ -44,6 +56,11 @@ apis:
   humanURL: https://super73.com/agents.md
   baseURL: https://super73.com/api/ucp/mcp
   tags:
+  - Agentic Commerce
+  - MCP
+  - Universal Commerce Protocol
+  - E-Commerce
+  tags_raw:
   - Agentic Commerce
   - Model Context Protocol
   - Universal Commerce Protocol
@@ -90,6 +107,11 @@ apis:
   humanURL: https://eu.super73.com/llms.txt
   baseURL: https://eu.super73.com/api/ucp/mcp
   tags:
+  - Agentic Commerce
+  - MCP
+  - Universal Commerce Protocol
+  - Europe
+  tags_raw:
   - Agentic Commerce
   - Model Context Protocol
   - Universal Commerce Protocol
