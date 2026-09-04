@@ -13,6 +13,21 @@ description: >-
   /.well-known/ucp, a live MCP endpoint at /api/ucp/mcp serving 13 commerce tools with full JSON Schema,
   and an anonymously introspectable Shopify Storefront GraphQL API.
 url: https://raw.githubusercontent.com/api-evangelist/super73/refs/heads/main/apis.yml
+accessModel:
+  pricing: unknown
+  onboarding: unknown
+  trial: false
+  try_now: false
+  public: false
+  label: Unknown
+  confidence: low
+  source:
+  - authentication
+  - scopes
+  - rate-limits
+  - security
+  generated: '2026-09-03'
+  method: derived
 image: https://super73.com/cdn/shop/files/Super73_Logo-Horizontal-Full-Tag_1200x628_ac39ec97-b650-40d2-b3d0-8c573b7fc9e7.jpg?v=1707761079
 x-type: company
 x-source: harvest:secondary-market
