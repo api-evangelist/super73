@@ -1,17 +1,16 @@
 aid: super73
 name: Super73
-description: >-
-  SUPER73 (legally SUPER73, Inc., founded 2016 in Orange County, California as Lithium Cycles) is an
-  American electric-bicycle and lifestyle adventure brand best known for its moped-styled Class 2 e-bikes
-  — the S-Series, ZX, RX, R-Series Adventure and the 2026 A-Series with modular dual-battery technology.
-  The company sells direct-to-consumer through Shopify storefronts in North America (super73.com) and
-  Europe (eu.super73.com, operated by SUPER73 BV), and pairs its bikes with a mobile app that adds
+description: 'SUPER73 (legally SUPER73, Inc., founded 2016 in Orange County, California as Lithium Cycles)
+  is an American electric-bicycle and lifestyle adventure brand best known for its moped-styled Class
+  2 e-bikes — the S-Series, ZX, RX, R-Series Adventure and the 2026 A-Series with modular dual-battery
+  technology. The company sells direct-to-consumer through Shopify storefronts in North America (super73.com)
+  and Europe (eu.super73.com, operated by SUPER73 BV), and pairs its bikes with a mobile app that adds
   Bluetooth ride telemetry plus a cellular IoT upgrade for GPS tracking, movement alerts, digital bike
-  passport and remote immobilizer. SUPER73 publishes no traditional developer program, but both
-  storefronts expose a real, anonymous, machine-callable agent surface: an /llms.txt and /agents.md agent
-  instruction document, a Universal Commerce Protocol (UCP 2026-08-25) merchant profile at
-  /.well-known/ucp, a live MCP endpoint at /api/ucp/mcp serving 13 commerce tools with full JSON Schema,
-  and an anonymously introspectable Shopify Storefront GraphQL API.
+  passport and remote immobilizer. SUPER73 publishes no traditional developer program, but both storefronts
+  expose a real, anonymous, machine-callable agent surface: an /llms.txt and /agents.md agent instruction
+  document, a Universal Commerce Protocol (UCP 2026-08-25) merchant profile at /.well-known/ucp, a live
+  MCP endpoint at /api/ucp/mcp serving 13 commerce tools with full JSON Schema, and an anonymously introspectable
+  Shopify Storefront GraphQL API.'
 url: https://raw.githubusercontent.com/api-evangelist/super73/refs/heads/main/apis.yml
 accessModel:
   pricing: unknown
@@ -59,15 +58,14 @@ tags_raw:
 - Internet of Things
 - Transportation
 apis:
-- aid: super73-agent-commerce
+- aid: super73:super73-agent-commerce
   name: SUPER73 Agent Commerce (UCP/MCP)
-  description: >-
-    The agent-facing commerce API for the SUPER73 North American storefront. Implements the Universal
-    Commerce Protocol (UCP) 2026-08-25 over MCP: a merchant profile at /.well-known/ucp declares the
-    supported versions, capabilities (cart, checkout, fulfillment, discount, order, catalog search and
-    lookup) and payment handlers, and the MCP endpoint at /api/ucp/mcp answers tools/list anonymously
+  description: 'The agent-facing commerce API for the SUPER73 North American storefront. Implements the
+    Universal Commerce Protocol (UCP) 2026-08-25 over MCP: a merchant profile at /.well-known/ucp declares
+    the supported versions, capabilities (cart, checkout, fulfillment, discount, order, catalog search
+    and lookup) and payment handlers, and the MCP endpoint at /api/ucp/mcp answers tools/list anonymously
     with 13 tools and complete JSON Schema inputs. Checkout completion requires contemporaneous human
-    buyer approval.
+    buyer approval.'
   humanURL: https://super73.com/agents.md
   baseURL: https://super73.com/api/ucp/mcp
   tags:
@@ -95,12 +93,11 @@ apis:
     url: conventions/super73-conventions.yml
   - type: DataModel
     url: data-model/super73-data-model.yml
-- aid: super73-storefront-graphql
+- aid: super73:super73-storefront-graphql
   name: SUPER73 Storefront GraphQL API
-  description: >-
-    The Shopify Storefront GraphQL API served on SUPER73's own host. Anonymous introspection and
-    anonymous read queries against SUPER73 catalog, collection, page, blog and shop data succeed with no
-    access token; cart and customer mutations are also exposed. The schema is Shopify's platform-standard
+  description: The Shopify Storefront GraphQL API served on SUPER73's own host. Anonymous introspection
+    and anonymous read queries against SUPER73 catalog, collection, page, blog and shop data succeed with
+    no access token; cart and customer mutations are also exposed. The schema is Shopify's platform-standard
     versioned Storefront schema (422 types at version 2025-07), served per-store — the templated-platform
     case, not a SUPER73-authored contract.
   humanURL: https://shopify.dev/docs/api/storefront
@@ -112,12 +109,11 @@ apis:
   properties:
   - type: GraphQL
     url: graphql/super73-storefront-graphql.yml
-- aid: super73-eu-agent-commerce
+- aid: super73:super73-eu-agent-commerce
   name: SUPER73 BV Agent Commerce (UCP/MCP)
-  description: >-
-    The agent-facing commerce API for the European SUPER73 storefront, operated by SUPER73 BV on the
-    super73europe Shopify store. Identical UCP 2026-08-25 / MCP surface to the North American store —
-    the same 13 tools — served from the eu.super73.com host with its own merchant profile, OAuth
+  description: The agent-facing commerce API for the European SUPER73 storefront, operated by SUPER73
+    BV on the super73europe Shopify store. Identical UCP 2026-08-25 / MCP surface to the North American
+    store — the same 13 tools — served from the eu.super73.com host with its own merchant profile, OAuth
     authorization server and buyer identity.
   humanURL: https://eu.super73.com/llms.txt
   baseURL: https://eu.super73.com/api/ucp/mcp
