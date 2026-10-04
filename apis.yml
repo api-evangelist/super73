@@ -93,6 +93,9 @@ apis:
     url: conventions/super73-conventions.yml
   - type: DataModel
     url: data-model/super73-data-model.yml
+  x-surface: platform-generated
+  x-platform: shopify
+  x-platform-surface: ucp
 - aid: super73:super73-storefront-graphql
   name: SUPER73 Storefront GraphQL API
   description: The Shopify Storefront GraphQL API served on SUPER73's own host. Anonymous introspection
@@ -109,6 +112,9 @@ apis:
   properties:
   - type: GraphQL
     url: graphql/super73-storefront-graphql.yml
+  x-surface: platform-generated
+  x-platform: shopify
+  x-platform-surface: storefront-graphql
 - aid: super73:super73-eu-agent-commerce
   name: SUPER73 BV Agent Commerce (UCP/MCP)
   description: The agent-facing commerce API for the European SUPER73 storefront, operated by SUPER73
@@ -132,6 +138,9 @@ apis:
     url: mcp/super73-eu-mcp.yml
   - type: LLMsTxt
     url: llms/super73-eu-llms.txt
+  x-surface: platform-generated
+  x-platform: shopify
+  x-platform-surface: ucp
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
